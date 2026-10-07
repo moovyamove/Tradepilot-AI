@@ -1,2 +1,256 @@
 # Tradepilot-AI
 TradePilot AI is a multi-user SaaS platform for intelligent trading analysis, risk management, paper trading, backtesting, and automated trade execution.
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TradePilot AI – Automatisez votre trading. Maîtrisez votre risque.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF1F3;--surface:#fff;--ink:#12202B;--mute:#51626E;--line:#CBD5DA;--teal:#0B6E78;--teal-t:#DCEEF0;--amber:#9A6700;--red:#B3382C;--red-t:#F7E1DE;--ok-t:#DDF0E4;--ok:#1E7A45;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E171D;--surface:#16232B;--ink:#E6EEF2;--mute:#9DB0BB;--line:#2A3B46;--teal:#4FC1CC;--teal-t:#123239;--amber:#E0B04A;--red:#F08A7E;--red-t:#3A1E1B;--ok:#6CCB92;--ok-t:#15321F}}
+:root[data-theme="dark"]{--bg:#0E171D;--surface:#16232B;--ink:#E6EEF2;--mute:#9DB0BB;--line:#2A3B46;--teal:#4FC1CC;--teal-t:#123239;--amber:#E0B04A;--red:#F08A7E;--red-t:#3A1E1B;--ok:#6CCB92;--ok-t:#15321F}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;line-height:1.1;margin:0}
+a{color:inherit}
+.w{max-width:1120px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line)}
+header .w{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{font:800 20px "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo i{font-style:normal;color:var(--teal)}
+nav{display:flex;gap:22px;font-size:15px}
+nav a{text-decoration:none;color:var(--mute)}nav a:hover{color:var(--ink)}
+@media(max-width:760px){nav{display:none}}
+.btn{display:inline-block;padding:12px 22px;border-radius:8px;font-weight:600;text-decoration:none;border:1.5px solid var(--ink);cursor:pointer;font-size:16px;font-family:inherit}
+.btn.p{background:var(--ink);color:var(--bg)}
+.btn.s{background:transparent;color:var(--ink)}
+.btn:focus-visible,summary:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;padding:72px 0 80px;align-items:center}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding:44px 0 56px}}
+h1{font-size:clamp(38px,6vw,64px);font-weight:800;letter-spacing:-.02em}
+.hero p.sub{font-size:19px;color:var(--mute);max-width:52ch;margin:20px 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.note{font-size:14px;color:var(--mute);margin-top:18px}
+/* risk gate panel */
+.gate{background:var(--surface);border:1.5px solid var(--ink);border-radius:14px;padding:22px}
+.gate h2{font-size:15px;font-weight:700;color:var(--mute);margin-bottom:14px;font-family:"IBM Plex Sans",sans-serif}
+.sig{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+.sig b{font:700 24px "Bricolage Grotesque",sans-serif}
+.sig span{font-size:14px;color:var(--mute)}
+.rows{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:15px;margin:0 0 14px}
+.rows dt{color:var(--mute)}.rows dd{margin:0;font-variant-numeric:tabular-nums;text-align:right;font-weight:500}
+.ctl{margin:16px 0}
+.ctl label{display:flex;justify-content:space-between;font-size:15px;font-weight:500}
+input[type=range]{width:100%;accent-color:var(--teal);margin-top:8px}
+.verdict{border-radius:10px;padding:14px 16px;font-weight:600;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.verdict small{display:block;font-weight:400;font-size:14px}
+.verdict.ok{background:var(--ok-t);color:var(--ok)}
+.verdict.no{background:var(--red-t);color:var(--red)}
+.verdict strong{font:800 20px "Bricolage Grotesque",sans-serif;white-space:nowrap}
+.demo{font-size:13px;color:var(--mute);margin:10px 0 0}
+/* sections */
+section{padding:72px 0;border-top:1px solid var(--line)}
+section>.w>h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+.lead{color:var(--mute);max-width:60ch;margin:0 0 40px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s}
+.steps li{counter-increment:s;padding:0 22px 0 0;border-top:3px solid var(--teal);padding-top:16px}
+.steps li::before{content:"Étape " counter(s);font-size:14px;color:var(--teal);font-weight:600}
+.steps h3{font-size:21px;margin:6px 0 8px}.steps p{margin:0;font-size:15.5px;color:var(--mute)}
+@media(max-width:900px){.steps{grid-template-columns:1fr 1fr;gap:28px}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:36px 32px}
+@media(max-width:900px){.feat{grid-template-columns:1fr 1fr}}@media(max-width:560px){.feat{grid-template-columns:1fr}}
+.feat h3{font-size:20px;margin-bottom:6px}.feat p{margin:0;color:var(--mute);font-size:15.5px}
+.sec{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+@media(max-width:820px){.sec{grid-template-columns:1fr}}
+.sec ul{margin:0;padding:0;list-style:none}
+.sec li{padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
+.sec li b{display:block}.sec li span{color:var(--mute);font-size:15px}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:980px){.plans{grid-template-columns:1fr 1fr}}@media(max-width:560px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column}
+.plan.hl{border:2px solid var(--teal)}
+.plan h3{font-size:22px}.plan .pr{font-size:15px;color:var(--mute);margin:4px 0 14px}
+.plan ul{margin:0 0 18px;padding-left:18px;font-size:15px;flex:1}.plan li{margin-bottom:6px}
+.fine{font-size:14px;color:var(--mute);margin-top:18px}
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:600;font-size:18px}
+details p{margin:10px 0 0;color:var(--mute);max-width:70ch}
+.risk{background:var(--red-t);color:var(--ink);border-left:4px solid var(--red);padding:18px 20px;border-radius:6px;font-size:15px}
+.risk p{margin:0 0 6px}.risk p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:40px 0 48px;font-size:14.5px;color:var(--mute)}
+footer .cols{display:flex;flex-wrap:wrap;gap:12px 28px;margin:16px 0 24px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+dialog{border:1.5px solid var(--ink);border-radius:14px;background:var(--surface);color:var(--ink);padding:0;width:min(440px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto}
+dialog::backdrop{background:rgba(10,20,26,.55)}
+.dl{padding:26px}.dl h2{font-size:26px;margin-bottom:6px}.dl p{margin:0 0 16px;color:var(--mute);font-size:15px}
+.x{float:right;background:none;border:0;font-size:26px;line-height:1;color:var(--mute);cursor:pointer}
+.fd{margin-bottom:14px}.fd label{display:block;font-weight:500;font-size:15px;margin-bottom:4px}
+.fd input[type=email],.fd input[type=password],.fd input[type=text]{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.fd input:focus-visible{border-color:var(--teal)}
+.er{color:var(--red);font-size:14px;min-height:20px;margin:0 0 8px}
+.ck{display:flex;gap:10px;font-size:14px;color:var(--mute);margin-bottom:14px}
+.lk{background:none;border:0;padding:0;color:var(--teal);font:inherit;font-size:14.5px;text-decoration:underline;cursor:pointer}
+.dl .btn{width:100%;text-align:center}
+.bn{background:var(--amber);color:#fff;font-size:13px;padding:7px 26px;font-weight:500}
+.sw{display:flex;justify-content:space-between;margin-top:16px;font-size:14.5px;gap:8px;flex-wrap:wrap}
+.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--ok-t);color:var(--ok)}
+.chip.w{background:var(--teal-t);color:var(--teal)}
+</style>
+</head>
+<body>
+<header><div class="w">
+  <a class="logo" href="#top">TradePilot<i> AI</i></a>
+  <nav aria-label="Navigation principale"><a href="#comment">Comment ça marche</a><a href="#fonctions">Fonctionnalités</a><a href="#securite">Sécurité</a><a href="#tarifs">Tarifs</a><a href="#faq">FAQ</a></nav>
+  <div style="display:flex;gap:8px"><button class="btn s" data-auth="login" id="hl" style="padding:9px 16px;font-size:15px">Se connecter</button><button class="btn p" data-auth="signup" id="hs" style="padding:9px 16px;font-size:15px">Commencer gratuitement</button></div>
+</div></header>
+
+<main id="top">
+<div class="w hero">
+  <div>
+    <h1>Automatisez votre trading. Maîtrisez votre risque.</h1>
+    <p class="sub">TradePilot AI analyse les marchés, identifie les opportunités et automatise vos stratégies tout en respectant vos limites de risque.</p>
+    <div class="cta"><button class="btn p" data-auth="signup">Commencer gratuitement</button><a class="btn s" href="#comment">Voir comment ça marche</a></div>
+    <p class="note">Tout nouveau compte démarre en Paper Trading (argent virtuel). Le mode Live reste désactivé tant que vous ne l'activez pas explicitement.</p>
+  </div>
+
+  <div class="gate" aria-labelledby="gt">
+    <h2 id="gt">Le Risk Engine a toujours le dernier mot</h2>
+    <div class="sig"><b>BTC/USDT · Achat</b><span>Score interne 86/100</span></div>
+    <dl class="rows">
+      <dt>Entrée</dt><dd>100,00</dd>
+      <dt>Stop Loss</dt><dd>98,00</dd>
+      <dt>Take Profit</dt><dd>106,00</dd>
+      <dt>Risque / Gain</dt><dd>1 : 3</dd>
+      <dt>Taille de position</dt><dd id="size">–</dd>
+    </dl>
+    <div class="ctl">
+      <label for="rk"><span>Risque par trade</span><span id="rkv">0,5 %</span></label>
+      <input id="rk" type="range" min="0.1" max="3" step="0.1" value="0.5">
+    </div>
+    <div id="vd" class="verdict ok" role="status" aria-live="polite"></div>
+    <p class="demo">Démonstration avec un capital de 10 000 € et une limite de 1 % par trade. Exemple chiffré, pas un résultat réel.</p>
+  </div>
+</div>
+
+<section id="comment"><div class="w">
+  <h2>Comment ça marche</h2>
+  <p class="lead">Un parcours en quatre étapes, du test sans risque à l'automatisation encadrée.</p>
+  <ol class="steps">
+    <li><h3>Configurez</h3><p>Définissez vos marchés, votre risque par trade, votre perte quotidienne et votre drawdown maximum.</p></li>
+    <li><h3>Testez</h3><p>Lancez le Paper Trading et des backtests pour observer le comportement de vos stratégies sans engager de capital.</p></li>
+    <li><h3>Connectez</h3><p>Reliez votre broker avec une clé API sans droit de retrait. Nous ne demandons jamais vos identifiants.</p></li>
+    <li><h3>Supervisez</h3><p>Les signaux sont validés par le Risk Engine. Vous pouvez tout arrêter à tout moment avec Emergency Stop.</p></li>
+  </ol>
+</div></section>
+
+<section id="fonctions"><div class="w">
+  <h2>Ce que contient la plateforme</h2>
+  <p class="lead">Chaque module est indépendant, pour que l'IA ne puisse jamais passer au-dessus des règles de risque.</p>
+  <div class="feat">
+    <div><h3>Scanner de marché</h3><p>Tendance, volume, volatilité, RSI, MACD, ATR, supports et résistances sur les actifs que vous choisissez.</p></div>
+    <div><h3>Détection d'opportunités</h3><p>Chaque signal indique direction, entrée, stop, objectif, ratio risque/gain, stratégie et raisons. Le score est un indicateur interne, pas une probabilité de gain.</p></div>
+    <div><h3>Risk Engine</h3><p>Taille de position calculée automatiquement. Si une limite est dépassée, le résultat est : NO TRADE.</p></div>
+    <div><h3>Paper Trading</h3><p>Capital virtuel, historique, P&amp;L et drawdown pour tester avant tout passage en Live.</p></div>
+    <div><h3>Strategy Lab</h3><p>Backtests et comparaison : profit factor, espérance, drawdown, gain et perte moyens.</p></div>
+    <div><h3>Assistant IA</h3><p>Explique pourquoi un trade est proposé, refusé ou fermé. Il propose ; seules les règles décident.</p></div>
+  </div>
+</div></section>
+
+<section id="securite"><div class="w sec">
+  <div>
+    <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;margin-bottom:12px">Sécurité par conception</h2>
+    <p class="lead" style="margin-bottom:0">Vos données de trading sont isolées par compte et vos clés API ne quittent jamais le serveur.</p>
+  </div>
+  <ul>
+    <li><b>Clés API chiffrées</b><span>Jamais visibles dans l'interface, ni pour les administrateurs.</span></li>
+    <li><b>Isolation des comptes</b><span>Chaque requête vérifie l'identité et le périmètre de l'utilisateur.</span></li>
+    <li><b>Aucun droit de retrait</b><span>Les clés avec permission de retrait sont refusées lorsque c'est détectable.</span></li>
+    <li><b>Emergency Stop et arrêts automatiques</b><span>Perte journalière, drawdown, erreurs API ou données invalides.</span></li>
+    <li><b>Authentification renforcée</b><span>Confirmation d'e-mail, 2FA, sessions gérées, journal d'audit.</span></li>
+  </ul>
+</div></section>
+
+<section id="tarifs"><div class="w">
+  <h2>Tarifs</h2>
+  <p class="lead">Les prix sont définis depuis l'administration et s'afficheront ici dès leur publication.</p>
+  <div class="plans">
+    <div class="plan"><h3>Free</h3><div class="pr">Prix : à définir</div><ul><li>Paper Trading</li><li>Stratégies limitées</li><li>Scanner limité</li><li>Dashboard</li></ul><button class="btn p" data-auth="signup">Commencer gratuitement</button></div>
+    <div class="plan"><h3>Starter</h3><div class="pr">Prix : à définir</div><ul><li>Scanner complet</li><li>Plus de stratégies</li><li>Alertes</li><li>Backtesting limité</li></ul><a class="btn s" href="#top">Choisir Starter</a></div>
+    <div class="plan hl"><h3>Pro</h3><div class="pr">Prix : à définir</div><ul><li>Automatisation encadrée</li><li>Stratégies avancées</li><li>Backtesting avancé</li><li>Statistiques avancées</li></ul><a class="btn p" href="#top">Choisir Pro</a></div>
+    <div class="plan"><h3>Elite</h3><div class="pr">Prix : à définir</div><ul><li>Fonctionnalités avancées</li><li>Support prioritaire</li><li>Limites supérieures</li></ul><a class="btn s" href="#top">Choisir Elite</a></div>
+  </div>
+  <p class="fine">Abonnements mensuels ou annuels, période d'essai et codes promotionnels prévus. Les paiements passent par un prestataire certifié ; aucune donnée bancaire n'est stockée chez TradePilot AI.</p>
+</div></section>
+
+<section id="faq"><div class="w">
+  <h2>Questions fréquentes</h2>
+  <div style="max-width:820px;margin-top:24px">
+    <details><summary>TradePilot AI garantit-il des gains ?</summary><p>Non. C'est un outil logiciel. Il ne garantit aucun rendement et le trading comporte un risque de perte en capital.</p></details>
+    <details><summary>Mon argent est-il déposé chez TradePilot AI ?</summary><p>Non. Vos fonds restent chez votre broker ou exchange. Nous nous connectons uniquement par clé API, sans droit de retrait.</p></details>
+    <details><summary>L'IA peut-elle ignorer mes limites de risque ?</summary><p>Non. Le Risk Engine est indépendant de l'IA et des stratégies. S'il refuse un ordre, l'ordre n'est pas envoyé.</p></details>
+    <details><summary>Puis-je essayer sans risquer d'argent ?</summary><p>Oui. Tous les comptes démarrent en Paper Trading. Le passage en Live demande une confirmation explicite et des vérifications préalables.</p></details>
+    <details><summary>Comment arrêter l'automatisation ?</summary><p>Le bouton Emergency Stop bloque les nouveaux ordres et annule les ordres en attente lorsque l'API du broker le permet.</p></details>
+  </div>
+</div></section>
+
+<section><div class="w">
+  <div class="risk" role="note">
+    <p><b>Avertissement sur les risques.</b> Le trading comporte un risque de perte en capital.</p>
+    <p>Les performances passées et simulations ne garantissent pas les performances futures.</p>
+    <p>TradePilot AI est un outil logiciel et ne garantit aucun rendement. Ce service ne constitue pas un conseil en investissement.</p>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="w">
+  <a class="logo" href="#top">TradePilot<i> AI</i></a>
+  <div class="cols"><a href="#">Conditions d'utilisation</a><a href="#">Politique de confidentialité</a><a href="#">Avertissement sur les risques</a><a href="#">Politique de cookies</a></div>
+  <div>© 2026 TradePilot AI. Les textes juridiques sont des emplacements à faire rédiger et valider par un juriste avant lancement.</div>
+</div></footer>
+
+<script>
+(function(){
+  var cap=10000,max=1,entry=100,sl=98,rr=3;
+  var r=document.getElementById('rk'),v=document.getElementById('rkv'),s=document.getElementById('size'),d=document.getElementById('vd');
+  var f=function(n,dg){return n.toLocaleString('fr-FR',{minimumFractionDigits:dg,maximumFractionDigits:dg})};
+  function upd(){
+    var p=parseFloat(r.value),riskAmt=cap*p/100,qty=riskAmt/(entry-sl);
+    v.textContent=f(p,1)+' %';
+    s.textContent=f(qty,1)+' unités ('+f(riskAmt,0)+' € de risque)';
+    if(p>max){d.className='verdict no';d.innerHTML='<span>Risque de '+f(p,1)+' % au-dessus de la limite de '+f(max,0)+' %<small>Le signal est ignoré, même avec un score de 86.</small></span><strong>NO TRADE</strong>'}
+    else{d.className='verdict ok';d.innerHTML='<span>Dans vos limites<small>Risque/gain 1:'+rr+' ≥ minimum 1:2 · Positions 1/3</small></span><strong>AUTORISÉ</strong>'}
+  }
+  r.addEventListener('input',upd);upd();
+})();
+</script>
+
+<dialog id="dg" aria-labelledby="dt"><div class="bn" role="note">Mode démo : aucun compte réel n'est créé et rien n'est envoyé.</div><div class="dl">
+<button class="x" id="dx" aria-label="Fermer">×</button>
+<div id="v-login" hidden><h2 id="dt">Connexion</h2><p>Accédez à votre espace TradePilot AI.</p>
+<div class="fd"><label for="le">E-mail</label><input id="le" type="email" autocomplete="email"></div>
+<div class="fd"><label for="lp">Mot de passe</label><input id="lp" type="password" autocomplete="current-password"></div>
+<p class="er" id="e-login" role="alert"></p><button class="btn p" id="b-login">Se connecter</button>
+<div class="sw"><button class="lk" data-go="forgot">Mot de passe oublié ?</button><button class="lk" data-go="signup">Créer un compte</button></div></div>
+
+<div id="v-signup" hidden><h2>Créer un compte</h2><p>Démarrez en Paper Trading, sans argent réel.</p>
+<div class="fd"><label for="se">E-mail</label><input id="se" type="email" autocomplete="email"></div>
+<div class="fd"><label for="sp">Mot de passe (12 caractères minimum)</label><input id="sp" type="password" autocomplete="new-password"></div>
+<div class="fd"><label for="sc">Code de parrainage (facultatif)</label><input id="sc" type="text" autocomplete="off"></div>
+<label class="ck"><input type="checkbox" id="sk"><span>J'accepte les conditions d'utilisation et je comprends que le trading comporte un risque de perte en capital.</span></label>
+<p class="er" id="e-signup" role="alert"></p><button class="btn p" id="b-signup">Créer mon compte</button>
+<div class="sw"><span>Déjà inscrit ?</span><button class="lk" data-go="login">Se connecter</button></div></div>
+
+<div id="v-forgot" hidden><h2>Mot de passe oublié</h2><p>Saisissez votre e-mail. Si un compte existe, vous recevrez un lien de réinitialisation.</p>
+<div class="fd"><label for="fe">E-mail</label><input id="fe" type="email" autocomplete="email"></div>
+<p class="er" id="e-forgot" role="alert"></p><button class="btn p" id="b-forgot">Envoyer le lien</button>
+<div class="sw"><button class="lk" data-go="login">Retour à la connexion</button></div></div>
+
+<div id="v-app" hidden><h2>Bonjour <span id="un"></span></h2><p>Espace démo. Voici l'état de départ d'un nouveau compte.</p>
+<dl class="rows"><dt>Mode</dt><dd><span class="chip w">PAPER</span></dd><dt>Live Trading</dt><dd>Désactivé</dd><dt>System status</dt><dd><span class="chip">🟢 ONLINE</span></dd><dt>Capital virtuel</dt><dd>10 000 €</dd><dt>Ri
